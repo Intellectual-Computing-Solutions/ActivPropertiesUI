@@ -1,5 +1,8 @@
 import axiosInstance from './axiosInstance';
 
+// Base URL is https://dev.activ.properties/api
+// so paths here are relative to /api (e.g. /auth/login → /api/auth/login)
+
 /**
  * Login using Basic Auth (email:password) + X-Tenant-Id header.
  * @param {string} email
@@ -9,7 +12,7 @@ import axiosInstance from './axiosInstance';
 export async function login(email, password, domain) {
   const credentials = btoa(`${email}:${password}`);
   const response = await axiosInstance.post(
-    '/api/auth/login',
+    '/auth/login',
     null,
     {
       headers: {
@@ -27,7 +30,7 @@ export async function login(email, password, domain) {
 export async function logout() {
   const token = localStorage.getItem('token');
   if (!token) return;
-  await axiosInstance.post('/api/auth/logout', null, {
+  await axiosInstance.post('/auth/logout', null, {
     headers: { Authorization: `Bearer ${token}` },
   });
 }
@@ -37,7 +40,7 @@ export async function logout() {
  * @param {string} email
  */
 export async function forgotPassword(email) {
-  const response = await axiosInstance.post('/api/auth/password/forgot', { email });
+  const response = await axiosInstance.post('/auth/password/forgot', { email });
   return response.data;
 }
 
@@ -48,7 +51,7 @@ export async function forgotPassword(email) {
  * @param {string} newPassword
  */
 export async function resetPassword(email, otp, newPassword) {
-  const response = await axiosInstance.post('/api/auth/password/reset', {
+  const response = await axiosInstance.post('/auth/password/reset', {
     email,
     otp,
     newPassword,
@@ -61,6 +64,6 @@ export async function resetPassword(email, otp, newPassword) {
  * @param {string} domain
  */
 export async function getAgencyDetails(domain) {
-  const response = await axiosInstance.get('/api/auth/agency', { params: { domain } });
+  const response = await axiosInstance.get('/auth/agency', { params: { domain } });
   return response.data;
 }
